@@ -9,6 +9,6 @@ golang:latest
 golang:1.23.2
 alpine
 node:18.20.4
-node:20.18.00
+node:22.11.0
 nginx:alpine
 nginx:latest
