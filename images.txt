@@ -1,14 +1,7 @@
-#nginx
-#支持私库
-#k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0
-#xhofe/alist:latest
-#支持指定架构
-#--platform=linux/arm64 xiaoyaliu/alist
-golang:1.22.5
+nginx
 golang:latest
-golang:1.23.2
+golang:1.23.3
 alpine
 node:18.20.4
 node:22.11.0
 nginx:alpine
-nginx:latest
