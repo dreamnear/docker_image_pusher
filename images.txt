@@ -1,8 +1,9 @@
-mysql:5.7
-nginx
-golang:latest
-golang:1.24.0
-alpine
-node:18.20.4
-node:22.11.0
-nginx:alpine
+#mysql:5.7
+#nginx
+#golang:latest
+#golang:1.24.0
+#alpine
+#node:18.20.4
+#node:22.11.0
+#nginx:alpine
+itsthenetwork/nfs-server-alpine:latest
