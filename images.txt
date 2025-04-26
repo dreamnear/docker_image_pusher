@@ -2,11 +2,13 @@
 #nginx
 #golang:latest
 #golang:1.24.0
-alpine
+#alpine
 #node:18.20.4
 #node:22.11.0
-node:20.18.0
-node
+#node:20.18.0
+#node
 #nginx:alpine
 itsthenetwork/nfs-server-alpine:latest
-emqx/emqx:5.8.6
+#emqx/emqx:5.8.6
+
+ghcr.io/telepresenceio/tel2:2.22.4-rc.0
