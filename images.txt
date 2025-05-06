@@ -11,4 +11,4 @@
 itsthenetwork/nfs-server-alpine:latest
 #emqx/emqx:5.8.6
 
-ghcr.io/telepresenceio/tel2:2.22.4-rc.0
+ubuntu/squid:latest
