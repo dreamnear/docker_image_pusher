@@ -9,7 +9,7 @@
 #node
 #nginx:alpine
 itsthenetwork/nfs-server-alpine:latest
-emqx/emqx:5.10
+emqx/emqx:5.8.7
 #ubuntu/squid:latest
 
 #natsio/nats-server-config-reloader:0.17.2
