@@ -15,4 +15,5 @@ itsthenetwork/nfs-server-alpine:latest
 #natsio/nats-server-config-reloader:0.17.2
 #nats:2.11.4-alpine
 #
-redis
+#redis
+mysql:latest
