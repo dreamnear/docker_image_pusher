@@ -16,4 +16,5 @@
 #nats:2.11.4-alpine
 #
 #redis
-mysql:latest
+#mysql:latest
+redis:7.2.12-alpine
