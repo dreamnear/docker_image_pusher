@@ -7,7 +7,7 @@
 #node:22.11.0
 #node:20.18.0
 #node
-node:24.13.0
+#node:24.13.0
 #nginx:alpine
 #itsthenetwork/nfs-server-alpine:latest
 #emqx/emqx:5.8.7
@@ -19,3 +19,5 @@ node:24.13.0
 #redis
 #mysql:latest
 #redis:7.2.12-alpine
+
+ghcr.io/telepresenceio/tel2:2.22.4-rc.0
