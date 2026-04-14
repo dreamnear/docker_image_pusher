@@ -20,4 +20,14 @@
 #mysql:latest
 #redis:7.2.12-alpine
 
-ghcr.io/telepresenceio/tel2:2.22.4-rc.0
+# Kuma 2.13.2                                                                                            
+docker.io/kumahq/kuma-cp:2.13.2                                      
+docker.io/kumahq/kuma-dp:2.13.2                                                                          
+docker.io/kumahq/kuma-init:2.13.2                                                                        
+docker.io/kumahq/kumactl:2.13.2                                                                          
+docker.io/kumahq/kuma-cni:2.13.2                                                                         
+docker.io/kumahq/kubectl:v1.34.3                                                                         
+                                                                                                           
+# Kong 3.1.0                                                                                             
+docker.io/kong/kong:3.9                                                                                  
+docker.io/kong/kubernetes-ingress-controller:3.5    
