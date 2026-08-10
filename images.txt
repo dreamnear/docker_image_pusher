@@ -1,1 +1,1 @@
-ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.13.0
+registry.k8s.io/metrics-server/metrics-server:v0.8.0
