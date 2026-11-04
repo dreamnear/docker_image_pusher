@@ -1,11 +1,11 @@
 name: sync-trivy-db
-# 每周从 ghcr 拉 trivy 漏洞库，构建「trivy 二进制 + 内嵌 DB」一体化镜像推 ACR。
+# 每日从 ghcr 拉 trivy 漏洞库，构建「trivy 二进制 + 内嵌 DB」一体化镜像推 ACR。
 # 目的：境内无代理的 K8s GitLab runner 只需从 ACR 拉镜像即可离线扫描，
 #       完全绕开 ghcr.io / mirror.gcr.io 出网问题，也绕开 ACR 不接收 OCI artifact 的限制
 #       （构建产物是标准 docker 镜像）。
 on:
   schedule:
-    - cron: '0 20 * * 0'   # 每周日 20:00 UTC = 北京周一 04:00
+    - cron: '0 20 * * *'   # 每日 20:00 UTC = 北京次日 04:00（漏洞库每日更新）
   workflow_dispatch: {}
 
 jobs:
