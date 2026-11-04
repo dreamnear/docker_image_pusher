@@ -1,4 +1,8 @@
 name: sync-trivy-db
+# 每周从 ghcr 拉 trivy 漏洞库，构建「trivy 二进制 + 内嵌 DB」一体化镜像推 ACR。
+# 目的：境内无代理的 K8s GitLab runner 只需从 ACR 拉镜像即可离线扫描，
+#       完全绕开 ghcr.io / mirror.gcr.io 出网问题，也绕开 ACR 不接收 OCI artifact 的限制
+#       （构建产物是标准 docker 镜像）。
 on:
   schedule:
     - cron: '0 20 * * 0'   # 每周日 20:00 UTC = 北京周一 04:00
@@ -9,19 +13,34 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ALIYUN_REGISTRY: ${{ secrets.ALIYUN_REGISTRY }}
-      ALIYUN_NAME_SPACE: ${{ secrets.ALIYUN_NAME_SPACE }}
       ALIYUN_REGISTRY_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
       ALIYUN_REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+      TRIVY_VERSION: "0.76.1"
+      DB_IMAGE: "lizuhub/security-trivy-db"
     steps:
       - name: Install skopeo
         run: sudo apt-get update -qq && sudo apt-get install -y -qq skopeo
-      - name: Login ACR
-        run: echo "$ALIYUN_REGISTRY_PASSWORD" | skopeo login "$ALIYUN_REGISTRY" -u "$ALIYUN_REGISTRY_USER" --password-stdin
-      - name: Copy trivy-db (ghcr -> ACR, OCI artifact 原样)
+
+      - name: Pull trivy-db from ghcr and extract DB files
         run: |
-          skopeo copy --dest-tls-verify=false \
-            docker://ghcr.io/aquasecurity/trivy-db:2 \
-            docker://$ALIYUN_REGISTRY/lizuhub/security-trivy-db:2
+          mkdir -p dbimg db
+          skopeo copy docker://ghcr.io/aquasecurity/trivy-db:2 dir:dbimg
+          LAYER=$(ls -S dbimg | head -1)
+          tar -xzf "dbimg/$LAYER" -C db --strip-components=1
+          ls -lh db/
+          test -s db/trivy.db
+          test -s db/metadata.json
+
+      - name: Build image (trivy binary + embedded DB)
+        run: |
+          printf 'FROM aquasec/trivy:%s\nCOPY db/ /opt/trivy-cache/db/\nENV TRIVY_CACHE_DIR=/opt/trivy-cache\nENV TRIVY_SKIP_JAVA_DB_UPDATE=true\n' "$TRIVY_VERSION" > Dockerfile
+          docker build -t "$ALIYUN_REGISTRY/$DB_IMAGE:$TRIVY_VERSION" .
+
+      - name: Push to ACR
+        run: |
+          echo "$ALIYUN_REGISTRY_PASSWORD" | docker login "$ALIYUN_REGISTRY" -u "$ALIYUN_REGISTRY_USER" --password-stdin
+          docker push "$ALIYUN_REGISTRY/$DB_IMAGE:$TRIVY_VERSION"
+
       - name: Verify
         run: |
-          skopeo inspect --tls-verify=false docker://$ALIYUN_REGISTRY/lizuhub/security-trivy-db:2 --format 'OK: {{.Digest}}'
+          skopeo inspect --tls-verify=false "docker://$ALIYUN_REGISTRY/$DB_IMAGE:$TRIVY_VERSION" --format 'OK: {{.Digest}}'
