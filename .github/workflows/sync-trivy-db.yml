@@ -26,7 +26,9 @@ jobs:
           mkdir -p dbimg db
           skopeo copy docker://ghcr.io/aquasecurity/trivy-db:2 dir:dbimg
           LAYER=$(ls -S dbimg | head -1)
-          tar -xzf "dbimg/$LAYER" -C db --strip-components=1
+          tar -xzf "dbimg/$LAYER" -C db
+          # 官方 artifact 层内为根级文件；若带 db/ 前缀则拍平
+          if [ -f db/db/trivy.db ]; then mv db/db/* db/ && rmdir db/db; fi
           ls -lh db/
           test -s db/trivy.db
           test -s db/metadata.json
