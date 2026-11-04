@@ -18,4 +18,5 @@ jobs:
             docker://ghcr.io/aquasecurity/trivy-db:2 \
             docker://$ALIYUN_REGISTRY/lizuhub/security-trivy-db:2
       - name: Verify
-        run: skopeo inspect --tls-verify=false docker://$ALIYUN_REGISTRY/lizuhub/security-trivy-db:2 --format 'OK: {{.Digest}}'
+        run: |
+          skopeo inspect --tls-verify=false docker://$ALIYUN_REGISTRY/lizuhub/security-trivy-db:2 --format 'OK: {{.Digest}}'
