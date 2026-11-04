@@ -17,9 +17,9 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq skopeo
       - name: Login ACR
         run: echo "$ALIYUN_REGISTRY_PASSWORD" | skopeo login "$ALIYUN_REGISTRY" -u "$ALIYUN_REGISTRY_USER" --password-stdin
-      - name: Copy trivy-db (ghcr -> ACR, schema2)
+      - name: Copy trivy-db (ghcr -> ACR, OCI artifact 原样)
         run: |
-          skopeo copy --format v2s2 --dest-tls-verify=false \
+          skopeo copy --dest-tls-verify=false \
             docker://ghcr.io/aquasecurity/trivy-db:2 \
             docker://$ALIYUN_REGISTRY/lizuhub/security-trivy-db:2
       - name: Verify
